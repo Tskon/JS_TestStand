@@ -30,7 +30,7 @@ function Converter(node, dollarVal = 52, euroVal = 70) {
     euroResult.innerHTML = 'В евро: 0';
 
     input.addEventListener('change', function () {
-        if(!isANum(+input.value) || input.value < 0) {
+        if (!isANum(+input.value) || input.value < 0) {
             input.value = '';
             input.placeholder = 'Введите число > 0'
         }
@@ -50,9 +50,9 @@ function Game(node, qnaObj = {'answer': 'question'}) {
     let aArr = [];
     for (let key in qnaObj) {
         qArr.push(qnaObj[key]);
-        if (isANum(key)){
+        if (isANum(key)) {
             aArr.push(key);
-        }else{
+        } else {
             aArr.push(key.toLowerCase());
         }
     }
@@ -60,28 +60,30 @@ function Game(node, qnaObj = {'answer': 'question'}) {
     let i = qArr.length;
     let correctCount = 0;
     startIteration();
-
-    function startIteration(){
+    button.addEventListener('click', function () {
+        setAnswer();
+    });
+    function startIteration() {
         i--;
         answer.value = '';
         answer.placeholder = 'Введите ответ';
         answer.focus();
         question.innerHTML = qArr[i];
-        button.addEventListener('click', function () {
-            let temp = answer.value;
-            if (!isANum(answer.value)){
-                temp = answer.value.toLowerCase();
-            }
-            if (aArr[i] == temp) {correctCount++}
-            if (i > 0){
-                return startIteration();
-            }else{
-                node.innerHTML = 'Правильных ответов: ' + correctCount;
-            }
-        });
     }
-
-
+    function setAnswer() {
+        let temp = answer.value;
+        if (!isANum(answer.value)) {
+            temp = answer.value.toLowerCase();
+        }
+        if (aArr[i] == temp) {
+            correctCount++
+        }
+        if (i > 0) {
+            return startIteration();
+        } else {
+            node.innerHTML = 'Правильных ответов: ' + correctCount;
+        }
+    }
 }
 
 const container = document.querySelector('.container');
@@ -94,7 +96,7 @@ new Interface(container, {
         new Game(appWrapper, {
             5: '2 + 3 = ? (числом)',
             'эверест': 'Самая высокая гора?',
-            3: 'Сколько агрегатных состояний у воды?'
+            3: 'Сколько агрегатных состояний у воды? (Числом)'
         });
     }
 });
