@@ -70,6 +70,7 @@ function Game(node, qnaObj = {'answer': 'question'}) {
         answer.focus();
         question.innerHTML = qArr[i];
     }
+
     function setAnswer() {
         let temp = answer.value;
         if (!isANum(answer.value)) {
@@ -82,6 +83,56 @@ function Game(node, qnaObj = {'answer': 'question'}) {
             return startIteration();
         } else {
             node.innerHTML = 'Правильных ответов: ' + correctCount;
+        }
+    }
+}
+function DepositCalc(node) {
+    node.appendChild(document.createElement('h3')).innerHTML = 'Калькулятор вклада с капитализацией';
+    node.appendChild(document.createElement('p')).innerHTML = 'Вносимая сумма:';
+    const startMoneyVal = node.appendChild(document.createElement('input'));
+    startMoneyVal.type = 'text';
+    startMoneyVal.value = 10000;
+
+    node.appendChild(document.createElement('p')).innerHTML = 'Годовой процент:';
+    const percent = node.appendChild(document.createElement('input'));
+    percent.type = 'text';
+    percent.value = 10;
+
+    node.appendChild(document.createElement('p')).innerHTML = 'Срок(лет):';
+    const date = node.appendChild(document.createElement('input'));
+    date.type = 'text';
+    date.value = 5;
+
+    const btn = node.appendChild(document.createElement('input'));
+    btn.type = 'button';
+    btn.value = 'Посчитать';
+    btn.classList.add('deposit__btn');
+
+    btn.addEventListener('click', function () {
+        const money = +startMoneyVal.value;
+        const per = +percent.value;
+        const years = +date.value;
+        if (isANum(money) && isANum(per) && isANum(years)) {
+            node.innerHTML = 'По окончанию вклада сумма(руб): ' + toCalc(money, per, years);
+        } else {
+            startMoneyVal.value = 0;
+            percent.value = 0;
+            date.value = 0;
+        }
+    });
+
+    function toCalc(money, per, years) {
+        let result = money;
+        iteration(money, per, years);
+        return result.toFixed(2);
+
+        function iteration(money, per, years) {
+            if (years > 0) {
+                result += money * per / 100;
+                iteration(result, per, years - 1);
+            } else {
+                return result;
+            }
         }
     }
 }
@@ -98,6 +149,9 @@ new Interface(container, {
             'эверест': 'Самая высокая гора?',
             3: 'Сколько агрегатных состояний у воды? (Числом)'
         });
+    },
+    'Deposit': function () {
+        new DepositCalc(appWrapper);
     }
 });
 
